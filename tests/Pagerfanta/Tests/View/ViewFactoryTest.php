@@ -3,15 +3,16 @@
 namespace Pagerfanta\Tests\View;
 
 use Pagerfanta\View\ViewFactory;
+use PHPUnit\Framework\TestCase;
 
-class ViewFactoryTest extends \PHPUnit_Framework_TestCase
+class ViewFactoryTest extends TestCase
 {
     public function testFactory()
     {
-        $view1 = $this->getMock('Pagerfanta\View\ViewInterface');
-        $view2 = $this->getMock('Pagerfanta\View\ViewInterface');
-        $view3 = $this->getMock('Pagerfanta\View\ViewInterface');
-        $view4 = $this->getMock('Pagerfanta\View\ViewInterface');
+        $view1 = $this->getMockBuilder('Pagerfanta\View\ViewInterface')->getMock();
+        $view2 = $this->getMockBuilder('Pagerfanta\View\ViewInterface')->getMock();
+        $view3 = $this->getMockBuilder('Pagerfanta\View\ViewInterface')->getMock();
+        $view4 = $this->getMockBuilder('Pagerfanta\View\ViewInterface')->getMock();
 
         $factory = new ViewFactory();
 

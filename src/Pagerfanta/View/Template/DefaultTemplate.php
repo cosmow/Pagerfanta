@@ -17,15 +17,17 @@ namespace Pagerfanta\View\Template;
 class DefaultTemplate extends Template
 {
     static protected $defaultOptions = array(
-        'previous_message'   => 'Previous',
+        'prev_message'   => 'Previous',
         'next_message'       => 'Next',
         'css_disabled_class' => 'disabled',
         'css_dots_class'     => 'dots',
         'css_current_class'  => 'current',
         'dots_text'          => '...',
         'container_template' => '<nav>%pages%</nav>',
-        'page_template'      => '<a href="%href%">%text%</a>',
+        'page_template'      => '<a href="%href%"%rel%>%text%</a>',
         'span_template'      => '<span class="%class%">%text%</span>',
+        'rel_previous'        => 'prev',
+        'rel_next'            => 'next'
     );
 
     public function container()
@@ -40,24 +42,24 @@ class DefaultTemplate extends Template
         return $this->pageWithText($page, $text);
     }
 
-    public function pageWithText($page, $text)
+    public function pageWithText($page, $text, $rel = null)
     {
-        $search = array('%href%', '%text%');
+        $search = array('%href%', '%text%', '%rel%');
 
         $href = $this->generateRoute($page);
-        $replace = array($href, $text);
+        $replace = $rel ? array($href, $text, ' rel="' . $rel . '"') : array($href, $text, '');
 
         return str_replace($search, $replace, $this->option('page_template'));
     }
 
     public function previousDisabled()
     {
-        return $this->generateSpan($this->option('css_disabled_class'), $this->option('previous_message'));
+        return $this->generateSpan($this->option('css_disabled_class'), $this->option('prev_message'));
     }
 
     public function previousEnabled($page)
     {
-        return $this->pageWithText($page, $this->option('previous_message'));
+        return $this->pageWithText($page, $this->option('prev_message'), $this->option('rel_previous'));
     }
 
     public function nextDisabled()
@@ -67,7 +69,7 @@ class DefaultTemplate extends Template
 
     public function nextEnabled($page)
     {
-        return $this->pageWithText($page, $this->option('next_message'));
+        return $this->pageWithText($page, $this->option('next_message'), $this->option('rel_next'));
     }
 
     public function first()

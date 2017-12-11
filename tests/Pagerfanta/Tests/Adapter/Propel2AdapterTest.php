@@ -2,41 +2,42 @@
 
 namespace Pagerfanta\Tests\Adapter;
 
-use Pagerfanta\Adapter\PropelAdapter;
+use Pagerfanta\Adapter\Propel2Adapter;
 use PHPUnit\Framework\TestCase;
 
 /**
- * PropelAdapterTest
+ * Propel2AdapterTest
  *
- * @author William DURAND <william.durand1@gmail.com>
+ * @author Claude Khedhiri <claude@khedhiri.com>
  */
-class PropelAdapterTest extends TestCase
+class Propel2AdapterTest extends TestCase
 {
     private $query;
+
     /**
-     * @var PropelAdapter
+     * @var Propel2Adapter
      */
     private $adapter;
 
     protected function setUp()
     {
-        if ($this->isPropelNotAvaiable()) {
-            $this->markTestSkipped('Propel is not available');
+        if ($this->isPropel2NotAvaiable()) {
+            $this->markTestSkipped('Propel 2 is not available');
         }
 
         $this->query = $this->createQueryMock();
-        $this->adapter = new PropelAdapter($this->query);
+        $this->adapter = new Propel2Adapter($this->query);
     }
 
-    private function isPropelNotAvaiable()
+    private function isPropel2NotAvaiable()
     {
-        return !class_exists('ModelCriteria');
+        return !class_exists('Propel\Runtime\ActiveQuery\ModelCriteria');
     }
 
     private function createQueryMock()
     {
         return $this
-            ->getMockBuilder('ModelCriteria')
+            ->getMockBuilder('Propel\Runtime\ActiveQuery\ModelCriteria')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -48,10 +49,6 @@ class PropelAdapterTest extends TestCase
 
     public function testGetNbResults()
     {
-        $this->query
-            ->expects($this->once())
-            ->method('limit')
-            ->with(0);
         $this->query
             ->expects($this->once())
             ->method('offset')

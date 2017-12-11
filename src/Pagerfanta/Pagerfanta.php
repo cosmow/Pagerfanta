@@ -11,9 +11,11 @@
 
 namespace Pagerfanta;
 
+use OutOfBoundsException;
 use Pagerfanta\Adapter\AdapterInterface;
 use Pagerfanta\Exception\LogicException;
 use Pagerfanta\Exception\NotBooleanException;
+use Pagerfanta\Exception\NotIntegerException;
 use Pagerfanta\Exception\NotIntegerMaxPerPageException;
 use Pagerfanta\Exception\LessThan1MaxPerPageException;
 use Pagerfanta\Exception\NotIntegerCurrentPageException;
@@ -423,7 +425,7 @@ class Pagerfanta implements \Countable, \IteratorAggregate, PagerfantaInterface
     public function getPreviousPage()
     {
         if (!$this->hasPreviousPage()) {
-            throw new LogicException('There is not previous page.');
+            throw new LogicException('There is no previous page.');
         }
 
         return $this->currentPage - 1;
@@ -449,7 +451,7 @@ class Pagerfanta implements \Countable, \IteratorAggregate, PagerfantaInterface
     public function getNextPage()
     {
         if (!$this->hasNextPage()) {
-            throw new LogicException('There is not next page.');
+            throw new LogicException('There is no next page.');
         }
 
         return $this->currentPage + 1;
@@ -497,5 +499,29 @@ class Pagerfanta implements \Countable, \IteratorAggregate, PagerfantaInterface
     private function needsToIntegerConversion($value)
     {
         return (is_string($value) || is_float($value)) && (int) $value == $value;
+    }
+
+    /**
+     * Get page number of the item at specified position (1-based index)
+     *
+     * @param integer $position
+     *
+     * @return integer
+     */
+    public function getPageNumberForItemAtPosition($position)
+    {
+        if (!is_int($position)) {
+            throw new NotIntegerException();
+        }
+
+        if ($this->getNbResults() < $position) {
+            throw new OutOfBoundsException(sprintf(
+                'Item requested at position %d, but there are only %d items.',
+                $position,
+                $this->getNbResults()
+            ));
+        }
+
+        return (int) ceil($position/$this->getMaxPerPage());
     }
 }

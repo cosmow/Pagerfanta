@@ -3,8 +3,9 @@
 namespace Pagerfanta\Tests\View;
 
 use Pagerfanta\View\OptionableView;
+use PHPUnit\Framework\TestCase;
 
-class OptionableViewTest extends \PHPUnit_Framework_TestCase
+class OptionableViewTest extends TestCase
 {
     private $pagerfanta;
     private $routeGenerator;
@@ -18,7 +19,7 @@ class OptionableViewTest extends \PHPUnit_Framework_TestCase
 
     private function createPagerfantaMock()
     {
-        return $this->getMock('Pagerfanta\PagerfantaInterface');
+        return $this->getMockBuilder('Pagerfanta\PagerfantaInterface')->getMock();
     }
 
     private function createRouteGenerator()
@@ -52,7 +53,7 @@ class OptionableViewTest extends \PHPUnit_Framework_TestCase
 
     private function createViewMock($expectedOptions)
     {
-        $view = $this->getMock('Pagerfanta\View\ViewInterface');
+        $view = $this->getMockBuilder('Pagerfanta\View\ViewInterface')->getMock();
         $view
             ->expects($this->once())
             ->method('render')

@@ -7,8 +7,9 @@ use Doctrine\Common\Collections\Selectable;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Version;
+use PHPUnit\Framework\TestCase;
 
-class DoctrineSelectableAdapterTest extends \PHPUnit_Framework_TestCase
+class DoctrineSelectableAdapterTest extends TestCase
 {
     private $selectable;
     private $criteria;
@@ -36,7 +37,7 @@ class DoctrineSelectableAdapterTest extends \PHPUnit_Framework_TestCase
 
     private function createSelectableMock()
     {
-        return $this->getMock('Doctrine\Common\Collections\Selectable');
+        return $this->getMockBuilder('Doctrine\Common\Collections\Selectable')->getMock();
     }
 
     private function createCriteria()
@@ -71,7 +72,7 @@ class DoctrineSelectableAdapterTest extends \PHPUnit_Framework_TestCase
 
     private function createCollectionMock()
     {
-        return $this->getMock('Doctrine\Common\Collections\Collection');
+        return $this->getMockBuilder('Doctrine\Common\Collections\Collection')->getMock();
     }
 
     public function testGetSlice()

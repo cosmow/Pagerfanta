@@ -3,6 +3,7 @@
 namespace Pagerfanta\Tests;
 
 use Pagerfanta\Pagerfanta;
+use PHPUnit\Framework\TestCase;
 
 class IteratorAggregate implements \IteratorAggregate
 {
@@ -19,7 +20,7 @@ class IteratorAggregate implements \IteratorAggregate
     }
 }
 
-class PagerfantaTest extends \PHPUnit_Framework_TestCase
+class PagerfantaTest extends TestCase
 {
     private $adapter;
     /**
@@ -29,7 +30,7 @@ class PagerfantaTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->adapter = $this->getMock('Pagerfanta\Adapter\AdapterInterface');
+        $this->adapter = $this->getMockBuilder('Pagerfanta\Adapter\AdapterInterface')->getMock();
         $this->pagerfanta = new Pagerfanta($this->adapter);
     }
 
@@ -691,5 +692,33 @@ class PagerfantaTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($currentPageResults0, $this->pagerfanta->getCurrentPageResults());
         $callback();
         $this->assertSame($currentPageResults1, $this->pagerfanta->getCurrentPageResults());
+    }
+
+    public function testGetPageNumberForItemShouldReturnTheGoodPage()
+    {
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(10);
+
+        $this->assertEquals(4, $this->pagerfanta->getPageNumberForItemAtPosition(35));
+    }
+
+    /**
+     * @expectedException Pagerfanta\Exception\NotIntegerException
+     */
+    public function testGetPageNumberForItemShouldThrowANotIntegerItemExceptionIfTheItemIsNotAnInteger()
+    {
+        $this->setAdapterNbResultsAny(100);
+
+        $this->pagerfanta->getPageNumberForItemAtPosition('foo');
+    }
+
+    /**
+     * @expectedException \OutOfBoundsException
+     */
+    public function testGetPageNumberForItemShouldThrowALogicExceptionIfTheItemIsMoreThanNbPage()
+    {
+        $this->setAdapterNbResultsAny(100);
+
+        $this->pagerfanta->getPageNumberForItemAtPosition(101);
     }
 }

@@ -4,8 +4,9 @@ namespace Pagerfanta\Tests\View;
 
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\View\ViewInterface;
+use PHPUnit\Framework\TestCase;
 
-abstract class ViewTestCase extends \PHPUnit_Framework_TestCase
+abstract class ViewTestCase extends TestCase
 {
     private $adapter;
     /**
@@ -26,7 +27,7 @@ abstract class ViewTestCase extends \PHPUnit_Framework_TestCase
 
     private function createAdapterMock()
     {
-        return $this->getMock('Pagerfanta\Adapter\AdapterInterface');
+        return $this->getMockBuilder('Pagerfanta\Adapter\AdapterInterface')->getMock();
     }
 
     /**
